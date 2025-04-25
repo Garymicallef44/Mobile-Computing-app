@@ -1,4 +1,6 @@
 package com.example.mobilecomputingproject.ui.playlists;
 
-public class PlaylistsFragment {
+import androidx.fragment.app.Fragment;
+
+public class PlaylistsFragment extends Fragment{
 }

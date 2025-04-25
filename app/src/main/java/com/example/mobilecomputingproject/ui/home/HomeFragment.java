@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.mobilecomputingproject.TrackLibViewModel;
 import com.example.mobilecomputingproject.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -18,6 +19,11 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        TrackLibViewModel viewModel =
+                new ViewModelProvider(requireActivity())
+                        .get(TrackLibViewModel.class);
+
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 

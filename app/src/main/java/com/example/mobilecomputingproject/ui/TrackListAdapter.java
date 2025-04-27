@@ -1,5 +1,6 @@
 package com.example.mobilecomputingproject.ui;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobilecomputingproject.R;
+import com.example.mobilecomputingproject.TrackActivity;
+import com.example.mobilecomputingproject.data.TrackHelper;
 import com.example.mobilecomputingproject.data.TrackItem;
 
 import java.util.ArrayList;
@@ -44,9 +47,16 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
 
         // Attach click listener to the card (or the entire itemView)
         holder.card.setOnClickListener(v -> {
-            if (listener != null && holder.getBindingAdapterPosition() != RecyclerView.NO_POSITION) {
-                listener.onItemClick(items.get(holder.getBindingAdapterPosition()));
-            }
+            Intent intent = new Intent(v.getContext(), TrackActivity.class);
+
+            TrackHelper trackHelper = new TrackHelper(v.getContext());
+
+            intent.putExtra("id", track.getId());
+            intent.putExtra("title", track.getTitle());
+            intent.putExtra("artist", track.getArtist());
+            intent.putExtra("genre", track.getGenre());
+            v.getContext().startActivity(intent);
+
         });
     }
 

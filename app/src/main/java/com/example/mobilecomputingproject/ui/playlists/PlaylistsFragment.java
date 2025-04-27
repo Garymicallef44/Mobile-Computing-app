@@ -1,10 +1,10 @@
 package com.example.mobilecomputingproject.ui.playlists;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mobilecomputingproject.R;
 import com.example.mobilecomputingproject.TrackLibViewModel;
 import com.example.mobilecomputingproject.ui.TrackListAdapter;
+import com.example.mobilecomputingproject.TrackActivity;
+
 
 public class PlaylistsFragment extends Fragment {
 
@@ -39,8 +41,13 @@ public class PlaylistsFragment extends Fragment {
         // 2) Adapter and click listener
         adapter = new TrackListAdapter();
         adapter.setOnItemClickListener(item -> {
-            // Handle click: show toast or navigate
-            Toast.makeText(requireContext(), "Clicked: " + item.getTitle(), Toast.LENGTH_LONG).show();
+            // create and launch the intent here
+            Intent intent = new Intent(requireContext(), TrackActivity.class);
+            intent.putExtra(TrackActivity.EXTRA_ID,     item.getId());
+            intent.putExtra(TrackActivity.EXTRA_TITLE,  item.getTitle());
+            intent.putExtra(TrackActivity.EXTRA_ARTIST, item.getArtist());
+            intent.putExtra(TrackActivity.EXTRA_GENRE,  item.getGenre());
+            startActivity(intent);
         });
         rv.setAdapter(adapter);
 

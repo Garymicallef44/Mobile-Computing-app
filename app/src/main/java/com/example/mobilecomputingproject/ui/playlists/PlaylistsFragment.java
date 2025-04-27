@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import com.example.mobilecomputingproject.ui.TrackListAdapter;
 public class PlaylistsFragment extends Fragment {
 
     private TrackListAdapter adapter;
+    private TrackLibViewModel vm;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,18 +35,24 @@ public class PlaylistsFragment extends Fragment {
         // 1) RecyclerView setup
         RecyclerView rv = view.findViewById(R.id.rvPlaylists);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-        TrackListAdapter adapter = new TrackListAdapter();
+
+        // 2) Adapter and click listener
+        adapter = new TrackListAdapter();
+        adapter.setOnItemClickListener(item -> {
+            // Handle click: show toast or navigate
+            Toast.makeText(requireContext(), "Clicked: " + item.getTitle(), Toast.LENGTH_LONG).show();
+        });
         rv.setAdapter(adapter);
 
-        // 2) Obtain ViewModel
-        TrackLibViewModel vm = new ViewModelProvider(requireActivity())
-                .get(TrackLibViewModel.class);
+        // 3) Obtain ViewModel
+        vm = new ViewModelProvider(requireActivity()).get(TrackLibViewModel.class);
 
-        // 3) Observe LiveData → Adapter
-        vm.getTracks().observe(getViewLifecycleOwner(), adapter::submitList);
+        // 4) Observe LiveData → Adapter
+        vm.getTracks().observe(getViewLifecycleOwner(), trackItems -> {
+            adapter.submitList(trackItems);
+        });
 
-        // 4) Trigger data load
+        // 5) Trigger data load
         vm.loadAllTracks();
     }
-
 }

@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobilecomputingproject.R;
@@ -15,35 +17,37 @@ import java.util.List;
 
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.ViewHolder> {
     private final List<TrackItem> items = new ArrayList<>();
+    private OnItemClickListener listener;
 
-    // ViewHolder holds references to the views of a ro
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView artist;
-        TextView genre;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            title = itemView.findViewById(R.id.textTitle);
-            artist = itemView.findViewById(R.id.textArtist);
-            genre = itemView.findViewById(R.id.textGenre);
-
-        }
+    public interface OnItemClickListener {
+        void onItemClick(TrackItem item);
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View row = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_track, parent, false);
         return new ViewHolder(row);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TrackItem track = items.get(position);
         holder.title.setText(track.getTitle());
         holder.artist.setText(track.getArtist());
         holder.genre.setText(track.getGenre());
+
+        // Attach click listener to the card (or the entire itemView)
+        holder.card.setOnClickListener(v -> {
+            if (listener != null && holder.getBindingAdapterPosition() != RecyclerView.NO_POSITION) {
+                listener.onItemClick(items.get(holder.getBindingAdapterPosition()));
+            }
+        });
     }
 
     @Override
@@ -51,7 +55,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         return items.size();
     }
 
-    /** Replace the current list with a new one and refresh */
     public void submitList(List<TrackItem> newItems) {
         items.clear();
         if (newItems != null) {
@@ -59,5 +62,19 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         }
         notifyDataSetChanged();
     }
-}
 
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView card;
+        TextView title;
+        TextView artist;
+        TextView genre;
+
+        ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            card = itemView.findViewById(R.id.card_track);
+            title = itemView.findViewById(R.id.textTitle);
+            artist = itemView.findViewById(R.id.textArtist);
+            genre = itemView.findViewById(R.id.textGenre);
+        }
+    }
+}

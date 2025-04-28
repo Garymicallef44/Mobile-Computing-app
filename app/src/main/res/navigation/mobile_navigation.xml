@@ -19,9 +19,9 @@
 
     <fragment
         android:id="@+id/navigation_playlists"
-        android:name="com.example.mobilecomputingproject.ui.playlists.PlaylistsFragment"
-        android:label="@string/title_playlists"
-        tools:layout="@layout/fragment_playlists" />
+        android:name="com.example.mobilecomputingproject.ui.library.LibraryFragment"
+        android:label="@string/title_library"
+        tools:layout="@layout/fragment_library" />
 
     <fragment
         android:id="@+id/navigation_profile"

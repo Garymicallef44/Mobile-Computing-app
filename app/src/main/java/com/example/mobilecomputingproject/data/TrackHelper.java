@@ -55,27 +55,6 @@ public class TrackHelper extends SQLiteOpenHelper {
         }
     }
 
-    public TrackList getTracksRandom(int no, String pTitle) {
-        TrackList trackList = new TrackList(pTitle);
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String query = "SELECT * FROM " + TrackDet.TrackDetails.TABLE_NAME + " ORDER BY RANDOM() LIMIT ? ";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(no)});
-
-        while (cursor.moveToNext()) {
-            long id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
-            String title = cursor.getString(cursor.getColumnIndexOrThrow(_title));
-            String artist = cursor.getString(cursor.getColumnIndexOrThrow(_artist));
-            String genre = cursor.getString(cursor.getColumnIndexOrThrow(_genre));
-            trackList.add(new TrackItem((int) id, title, artist, genre));
-        }
-        cursor.close();
-        return trackList;
-
-    }
-
     public long insertTrack(TrackItem track) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -147,7 +126,5 @@ public class TrackHelper extends SQLiteOpenHelper {
 
         return track;
     }
-
-
 
 }

@@ -1,4 +1,4 @@
-package com.example.mobilecomputingproject.ui.playlists;
+package com.example.mobilecomputingproject.ui.library;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.example.mobilecomputingproject.ui.TrackListAdapter;
 import com.example.mobilecomputingproject.TrackActivity;
 
 
-public class PlaylistsFragment extends Fragment {
+public class LibraryFragment extends Fragment {
 
     private TrackListAdapter adapter;
     private TrackLibViewModel vm;
@@ -27,13 +27,12 @@ public class PlaylistsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_playlists, container, false);
+        return inflater.inflate(R.layout.fragment_library, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // 1) RecyclerView setup
         RecyclerView rv = view.findViewById(R.id.rvPlaylists);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));

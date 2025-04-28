@@ -1,8 +1,8 @@
 package com.example.mobilecomputingproject;
 
 import android.os.Bundle;
+import android.util.Log;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.mobilecomputingproject.data.TrackHelper;
 import com.example.mobilecomputingproject.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean deleted = deleteDatabase(TrackHelper.DATABASE_NAME);
+        Log.d("MainActivity","database deleted:" + deleted);
 
         // 1) Inflate your layout
         binding = ActivityMainBinding.inflate(getLayoutInflater());

@@ -13,16 +13,17 @@
             android:id="@+id/trackId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="70dp"
             android:text="ID placeholder"
-            android:textAppearance="?attr/textAppearanceCaption"/>
+            android:textAppearance="?attr/textAppearanceCaption" />
 
         <TextView
             android:id="@+id/trackTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Title placeholder"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:paddingBottom="8dp"/>
+            android:textAppearance="?attr/textAppearanceHeadline6" />
 
         <TextView
             android:id="@+id/trackArtist"
@@ -36,9 +37,9 @@
             android:id="@+id/trackGenre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Genre placeholder"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:paddingBottom="8dp"/>
+            android:textAppearance="?attr/textAppearanceBody1" />
     </LinearLayout>
 </ScrollView>
 

@@ -48,9 +48,10 @@ public class TrackHelper extends SQLiteOpenHelper {
 
     public void initiateTables() {
         if (getTracks().isEmpty()) {
-            this.insertTrack(new TrackItem("Flower Viewing", "Ade", "Rock"));
-            this.insertTrack(new TrackItem("Stones of the gods", "DUN", "Pop"));
-            this.insertTrack(new TrackItem("Small Little Terrarium", "Shugayan","Bossanova"));
+            this.insertTrack(new TrackItem("My Heart To You", "Koosh", "Jpop"));
+            this.insertTrack(new TrackItem("Better to burn than to fade ", "Demetori", "Rock"));
+            this.insertTrack(new TrackItem("Full life", "Person","Pop"));
+            this.insertTrack(new TrackItem("Riebeck Cover", "Gary", "Classical"));
         }
     }
 
@@ -146,5 +147,7 @@ public class TrackHelper extends SQLiteOpenHelper {
 
         return track;
     }
+
+
 
 }

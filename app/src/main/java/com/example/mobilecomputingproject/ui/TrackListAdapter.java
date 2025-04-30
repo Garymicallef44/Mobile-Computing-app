@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,15 +21,39 @@ import java.util.List;
 
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.ViewHolder> {
     private final List<TrackItem> items = new ArrayList<>();
+    private final boolean isPlaylistMode;
     private OnItemClickListener listener;
+    private OnAddClickListener addListener;
+    private OnRemoveClickListener removeListener;
+
+
+    public TrackListAdapter(boolean isPlaylistMode) {
+        this.isPlaylistMode = isPlaylistMode;
+    }
+
+    public interface OnAddClickListener {
+        void onAddClick(TrackItem item);
+    }
+
+    public interface OnRemoveClickListener {
+        void onRemoveClick(TrackItem item);
+    }
 
     public interface OnItemClickListener {
         void onItemClick(TrackItem item);
     }
 
+    public void setOnAddClickListener(OnAddClickListener l) {
+        this.addListener = l;
+    }
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
+    public void setOnRemoveClickListener(OnRemoveClickListener rl) {
+        removeListener = rl;
+    }
+
 
     @NonNull
     @Override
@@ -58,6 +83,21 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
             v.getContext().startActivity(intent);
 
         });
+
+        if (isPlaylistMode) {
+            holder.btnAction.setText("Remove");
+            holder.btnAction.setOnClickListener(v -> {
+                if (removeListener != null)
+                    removeListener.onRemoveClick(track);
+            });
+        } else {
+            holder.btnAction.setText("Add");
+            holder.btnAction.setOnClickListener(v -> {
+                if (addListener != null)
+                    addListener.onAddClick(track);
+            });
+        }
+
     }
 
     @Override
@@ -67,9 +107,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
 
     public void submitList(List<TrackItem> newItems) {
         items.clear();
-        if (newItems != null) {
-            items.addAll(newItems);
-        }
+        if (newItems != null) items.addAll(newItems);
         notifyDataSetChanged();
     }
 
@@ -78,6 +116,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         TextView title;
         TextView artist;
         TextView genre;
+        Button btnAction;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,6 +124,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
             title = itemView.findViewById(R.id.textTitle);
             artist = itemView.findViewById(R.id.textArtist);
             genre = itemView.findViewById(R.id.textGenre);
+            btnAction = itemView.findViewById(R.id.btnAdd);
         }
     }
 }

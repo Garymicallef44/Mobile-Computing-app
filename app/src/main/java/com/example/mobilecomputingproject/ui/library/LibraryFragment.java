@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mobilecomputingproject.Prefs;
 import com.example.mobilecomputingproject.R;
 import com.example.mobilecomputingproject.TrackLibViewModel;
 import com.example.mobilecomputingproject.ui.TrackListAdapter;
@@ -22,6 +24,7 @@ public class LibraryFragment extends Fragment {
 
     private TrackListAdapter adapter;
     private TrackLibViewModel vm;
+    private Prefs prefs;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -33,12 +36,14 @@ public class LibraryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // 1) RecyclerView setup
-        RecyclerView rv = view.findViewById(R.id.rvPlaylists);
+        prefs = new Prefs(requireContext());
+
+        // RecyclerView setup
+        RecyclerView rv = view.findViewById(R.id.rvLibrary);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // 2) Adapter and click listener
-        adapter = new TrackListAdapter();
+        // Adapter and click listener
+        adapter = new TrackListAdapter(false);
         adapter.setOnItemClickListener(item -> {
             // create and launch the intent here
             Intent intent = new Intent(requireContext(), TrackActivity.class);
@@ -50,15 +55,22 @@ public class LibraryFragment extends Fragment {
         });
         rv.setAdapter(adapter);
 
-        // 3) Obtain ViewModel
+        adapter.setOnAddClickListener(item -> {
+            prefs.addToPlaylist(item.getId());
+            Toast.makeText(requireContext(),
+                    "'" + item.getTitle() + "' added to playlist",
+                    Toast.LENGTH_SHORT).show();
+        });
+
+        // Obtain ViewModel
         vm = new ViewModelProvider(requireActivity()).get(TrackLibViewModel.class);
 
-        // 4) Observe LiveData → Adapter
+        // Observe LiveData → Adapter
         vm.getTracks().observe(getViewLifecycleOwner(), trackItems -> {
             adapter.submitList(trackItems);
         });
 
-        // 5) Trigger data load
+        // Trigger data load
         vm.loadAllTracks();
     }
 }

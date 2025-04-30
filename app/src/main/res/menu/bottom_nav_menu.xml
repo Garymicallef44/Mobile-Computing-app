@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@android:drawable/ic_menu_info_details"
+        android:icon="@mipmap/ic_launcher"
         android:title="@string/title_profile" />
 
 </menu>

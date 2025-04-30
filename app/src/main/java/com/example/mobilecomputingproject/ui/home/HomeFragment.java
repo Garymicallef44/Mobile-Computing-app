@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,17 +21,19 @@ import com.example.mobilecomputingproject.TrackLibViewModel;
 import com.example.mobilecomputingproject.ui.TrackListAdapter;
 
 public class HomeFragment extends Fragment {
+    // Adapter for displaying a list of track items, shared viewmodel provides track data and prefs stores playlist contents
     private TrackListAdapter adapter;
     private TrackLibViewModel vm;
     private Prefs prefs;
 
+    // Inflate fragment layout containing a recyclerview for suggestions
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
-
+    // Sets up UI components and data observers on view creation
     @Override
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment {
         // Trigger loading
         vm.loadSuggestions(3);
 
+        // Handles tapping on a track card to open trackactivity detail intent
         adapter.setOnItemClickListener(item -> {
             Intent i = new Intent(requireContext(), TrackActivity.class);
             i.putExtra(TrackActivity.EXTRA_ID, item.getId());
@@ -66,7 +68,7 @@ public class HomeFragment extends Fragment {
             i.putExtra(TrackActivity.EXTRA_GENRE, item.getGenre());
             startActivity(i);
         });
-
+        // Handles tapping on the add button to save a track to the playlist
         adapter.setOnAddClickListener(item -> {
             prefs.addToPlaylist(item.getId());
             Toast.makeText(requireContext(),

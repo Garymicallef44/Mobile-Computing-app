@@ -19,18 +19,22 @@ import com.example.mobilecomputingproject.data.TrackItem;
 import java.util.ArrayList;
 import java.util.List;
 
+// Adapter for displaying a list of tracks, it operates in two modes according to the state of isplaylistmode
+// True shows a remove button on each card and false shows an add button on each card
 public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.ViewHolder> {
     private final List<TrackItem> items = new ArrayList<>();
     private final boolean isPlaylistMode;
+    // Listeners for clicking on cards or add/remove buttons
     private OnItemClickListener listener;
     private OnAddClickListener addListener;
     private OnRemoveClickListener removeListener;
 
-
+    // Constructor that accepts a flag to determine the mode
     public TrackListAdapter(boolean isPlaylistMode) {
         this.isPlaylistMode = isPlaylistMode;
     }
 
+    // Click event listener interfaces
     public interface OnAddClickListener {
         void onAddClick(TrackItem item);
     }
@@ -43,6 +47,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         void onItemClick(TrackItem item);
     }
 
+    // Register a listener for tapping on cards or add/remove buttons
     public void setOnAddClickListener(OnAddClickListener l) {
         this.addListener = l;
     }
@@ -54,7 +59,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         removeListener = rl;
     }
 
-
+    // Inflate row layout and wrap it in viewholder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -63,9 +68,12 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         return new ViewHolder(row);
     }
 
+    // Bind data and event handlers to the viewholder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         TrackItem track = items.get(position);
+        // Populate text fields
         holder.title.setText(track.getTitle());
         holder.artist.setText(track.getArtist());
         holder.genre.setText(track.getGenre());
@@ -84,6 +92,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
 
         });
 
+        // Configures the action button for each corresponding mode
         if (isPlaylistMode) {
             holder.btnAction.setText("Remove");
             holder.btnAction.setOnClickListener(v -> {
@@ -105,12 +114,14 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         return items.size();
     }
 
+    // Replace current list with a new one and refresh recycler view
     public void submitList(List<TrackItem> newItems) {
         items.clear();
         if (newItems != null) items.addAll(newItems);
         notifyDataSetChanged();
     }
 
+    // Viewholder caches references to the item's views for efficiency
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView card;
         TextView title;

@@ -4,6 +4,7 @@ import com.example.mobilecomputingproject.data.TrackItem;
 
 import java.util.List;
 
+// Simple class representing a playlist
 public class Playlist {
     public final String name;
     public final List<TrackItem> tracks;

@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 
+// This class manages db creation and version management, extending SQLiteOpenHelper which handles opening and upgrading the db.
 public class TrackHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "tracks-lib.db";
@@ -21,19 +22,20 @@ public class TrackHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // Called on database creation
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(createTables());
     }
-
+    // Called when database needs to be upgraded, drops old table and recreates it
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(dropTables());
         onCreate(db);
     }
-
+    // Same as onupgrade but is called when the db version is lower than requested
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
-
+    // Builds SQL string to create the tracks table
     private String createTables() {
         return "CREATE TABLE " + TrackDet.TrackDetails.TABLE_NAME + " (" +
                 TrackDet.TrackDetails._ID + " INTEGER PRIMARY KEY, " +
@@ -41,20 +43,22 @@ public class TrackHelper extends SQLiteOpenHelper {
                 _artist + " varchar, " +
                 _genre + " varchar)";
     }
-
+    // Drops the tracks table if it exists
     private String dropTables() {
         return "DROP TABLE IF EXISTS " + TrackDet.TrackDetails.TABLE_NAME;
     }
 
+    // Adds track details to the database if empty (db is always empty when the app runs so it updates if any new tracks are added)
     public void initiateTables() {
         if (getTracks().isEmpty()) {
-            this.insertTrack(new TrackItem("My Heart To You", "Koosh", "Jpop"));
+            this.insertTrack(new TrackItem("Upbeat Music", "Infraction", "Synth"));
             this.insertTrack(new TrackItem("Better to burn than to fade ", "Demetori", "Rock"));
             this.insertTrack(new TrackItem("Full life", "Person","Pop"));
             this.insertTrack(new TrackItem("Riebeck Cover", "Gary", "Classical"));
         }
     }
 
+    // Inserts a new track item into the database
     public long insertTrack(TrackItem track) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -68,6 +72,7 @@ public class TrackHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    // Retrieves all tracks by title alphabetically
     public ArrayList<TrackItem> getTracks() {
         ArrayList<TrackItem> tracks = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -81,9 +86,9 @@ public class TrackHelper extends SQLiteOpenHelper {
         };
 
         String sortOrder = _title + " ASC";
-
+        // Wraps raw sql and returns a cursor
         Cursor cursor = db.query(TrackDet.TrackDetails.TABLE_NAME, projection, null, null, null, null, sortOrder);
-
+        // Iterate through results and build track item list
         while (cursor.moveToNext()) {
             long id = cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID));
             String title = cursor.getString(cursor.getColumnIndexOrThrow(_title));
@@ -92,11 +97,11 @@ public class TrackHelper extends SQLiteOpenHelper {
             TrackItem track = new TrackItem((int) id, title, artist, genre);
             tracks.add(track);
         }
-        cursor.close();
+        cursor.close(); // Closes cursor to free resources
 
         return tracks;
     }
-
+    // Retrieves a track by its Id in the database
     public TrackItem getTrackById(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -109,7 +114,6 @@ public class TrackHelper extends SQLiteOpenHelper {
 
         String selection = BaseColumns._ID + " = ?";
         String[] selectionArgs = {Long.toString(id)};
-
         String sortOrder = _title + " ASC";
 
         Cursor cursor = db.query(TrackDet.TrackDetails.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
@@ -123,15 +127,12 @@ public class TrackHelper extends SQLiteOpenHelper {
             track = new TrackItem((int) trackId, title, genre, artist);
         }
         cursor.close();
-
         return track;
     }
-
+    // Retrieves a random set of tracks
     public TrackList getTracksRandom(int no, String pTitle) {
         TrackList trackList = new TrackList(pTitle);
-
         SQLiteDatabase db = this.getReadableDatabase();
-
         String query = "SELECT * FROM " + TrackDet.TrackDetails.TABLE_NAME + " ORDER BY RANDOM() LIMIT ? ";
 
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(no)});
@@ -145,7 +146,6 @@ public class TrackHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return trackList;
-
     }
 
 

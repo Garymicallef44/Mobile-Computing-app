@@ -25,19 +25,21 @@ import java.util.List;
 import java.util.Set;
 
 public class PlaylistsFragment extends Fragment {
-    private RecyclerView rv;
+    // Textview displays message when playlist is empty,
+    // Prefs stores playlist contents, Helper fetches track details with SQLite and adapter binds track items to recycler view rows
     private TextView tvEmpty;
     private Prefs prefs;
     private TrackHelper db;
     private TrackListAdapter adapter;
 
+    // Inflate fragment layout
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_playlists, container, false);
     }
-
+    // Once view is created, intialise UI components, load playlist data and set up listeners.
     @Override
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class PlaylistsFragment extends Fragment {
             startActivity(i);
         });
 
+        // Handle remove button taps to remove tracks from the playlist
         adapter.setOnRemoveClickListener(item -> {
             prefs.removeFromPlaylist(item.getId());
             // rebuild list
@@ -100,19 +103,5 @@ public class PlaylistsFragment extends Fragment {
             if (t != null) savedTracks.add(t);
         }
         adapter.submitList(savedTracks);
-
-    }
-    private void loadPlaylist() {
-        Set<String> ids = prefs.getPlaylistIds();
-        List<TrackItem> tracks = new ArrayList<>();
-        for (String s : ids) {
-            TrackItem t = db.getTrackById(Integer.parseInt(s));
-            if (t != null) tracks.add(t);
-        }
-        adapter.submitList(tracks);
-
-        boolean empty = tracks.isEmpty();
-        rv.setVisibility(empty ? View.GONE : View.VISIBLE);
-        tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
     }
 }

@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// Viewmodel provides track data to the UI.
 public class TrackLibViewModel extends AndroidViewModel {
+    // Helper for SQL operations, live data holding the list of all tracks, executor runs db operations off main thread,
+    // And live data holding a list of randomly selected track suggestions
     private final TrackHelper trackHelper;
     private final MutableLiveData<List<TrackItem>> tracks = new MutableLiveData<>();
     private final Executor executor = Executors.newSingleThreadExecutor();
@@ -23,7 +26,7 @@ public class TrackLibViewModel extends AndroidViewModel {
 
     public TrackLibViewModel(@NonNull Application app) {
         super(app);
-        // Initialize the final helper field (blank finals must be set here) :contentReference[oaicite:3]{index=3}
+        // Initialize the final helper field (blank finals must be set here)
         trackHelper = new TrackHelper(app);
         trackHelper.initiateTables();
     }
@@ -37,6 +40,7 @@ public class TrackLibViewModel extends AndroidViewModel {
         return suggestions;
     }
 
+    // Load a number of tracks in a bg thread and posts the resulting list into the suggestions livedata.
     public void loadSuggestions(int count) {
         executor.execute(() -> {
             // ← call the instance helper, not the class
@@ -45,10 +49,11 @@ public class TrackLibViewModel extends AndroidViewModel {
             suggestions.postValue(list.getTracks());
         });
     }
+    // Loads all tracks in a bg thread then posts the resulting list into tracks livedata
     public void loadAllTracks() {
         executor.execute(() -> {
             List<TrackItem> list = trackHelper.getTracks();
-            // postValue is safe from background threads :contentReference[oaicite:4]{index=4}
+            // postValue is safe from background threads
             tracks.postValue(list);
         });
     }

@@ -21,11 +21,12 @@ import com.example.mobilecomputingproject.TrackActivity;
 
 
 public class LibraryFragment extends Fragment {
-
+    // Adapter for binding track item to recycler view rows, shared viewmodel for loading and displaying all tracks and prefs for storing playlist contents
     private TrackListAdapter adapter;
     private TrackLibViewModel vm;
     private Prefs prefs;
 
+    // Inflate library fragment layout
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
@@ -33,6 +34,7 @@ public class LibraryFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_library, container, false);
     }
 
+    // On creation of the view, sets up recycler view, adapter, listeners and observes viewmodel for track data
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -54,7 +56,7 @@ public class LibraryFragment extends Fragment {
             startActivity(intent);
         });
         rv.setAdapter(adapter);
-
+        // Handles taps on the add button for adding tracks to playlist
         adapter.setOnAddClickListener(item -> {
             prefs.addToPlaylist(item.getId());
             Toast.makeText(requireContext(),

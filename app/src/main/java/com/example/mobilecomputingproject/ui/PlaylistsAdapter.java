@@ -15,14 +15,15 @@ import com.example.mobilecomputingproject.data.TrackItem;
 import java.util.ArrayList;
 import java.util.List;
 
+// Recycler view adapter that supports the header and child view types, one displays the name as a section header and the other displays a track item belonging to the header.
 public class PlaylistsAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+    // Distinguishes between types
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CHILD  = 1;
-
     private final List<Object> displayList;  // mix of Playlist (header) and TrackItem (child)
 
+    // Constructor builds the flat display list from hierarchical data
     public PlaylistsAdapter(List<Playlist> data) {
         displayList = new ArrayList<>();
         for (Playlist pl : data) {
@@ -33,17 +34,20 @@ public class PlaylistsAdapter
         }
     }
 
+    // Determine which view type to use based on data stored in displaylist
     @Override
     public int getItemViewType(int pos) {
         return (displayList.get(pos) instanceof String)
                 ? TYPE_HEADER : TYPE_CHILD;
     }
 
+    // Gets total number of items
     @Override
     public int getItemCount() {
         return displayList.size();
     }
 
+    // Inflate appropriate layout based on view type and wrap it in matching viewholder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(
@@ -58,7 +62,7 @@ public class PlaylistsAdapter
             return new ChildVH(v);
         }
     }
-
+    // Bind data to viewholder
     @Override
     public void onBindViewHolder(
             @NonNull RecyclerView.ViewHolder vh, int pos) {
@@ -71,7 +75,7 @@ public class PlaylistsAdapter
         }
     }
 
-    // ViewHolders
+    // ViewHolder for header items
     static class HeaderVH extends RecyclerView.ViewHolder {
         TextView name;
         HeaderVH(View v) {
@@ -83,6 +87,7 @@ public class PlaylistsAdapter
         }
     }
 
+    // ViewHolder for child items (tracks)
     static class ChildVH extends RecyclerView.ViewHolder {
         TextView title, artist;
         ChildVH(View v) {

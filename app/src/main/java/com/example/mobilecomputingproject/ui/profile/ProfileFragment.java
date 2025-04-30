@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.mobilecomputingproject.R;
 
+// Displays app icon and some details about the app
 public class ProfileFragment extends Fragment {
 
     private ImageView imgIcon;

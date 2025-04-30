@@ -1,8 +1,5 @@
 package com.example.mobilecomputingproject;
 
-import com.example.mobilecomputingproject.data.TrackHelper;
-
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,12 +9,13 @@ import android.media.MediaPlayer;
 import android.widget.Toast;
 
 public class TrackActivity extends AppCompatActivity {
+    // MediaPlayer instance for playing the selected track's audio
     private MediaPlayer mediaPlayer;
+    // Keys for intent details
     public static final String EXTRA_ID     = "id";
     public static final String EXTRA_TITLE  = "title";
     public static final String EXTRA_ARTIST = "artist";
     public static final String EXTRA_GENRE  = "genre";
-    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

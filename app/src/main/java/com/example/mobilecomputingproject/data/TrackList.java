@@ -3,13 +3,13 @@ package com.example.mobilecomputingproject.data;
 import java.util.ArrayList;
 import java.util.List;
 
+// Class that groups multiple track items under a common title.
 public class TrackList{
 
     public List<TrackItem> tracks = new ArrayList<>();
 
     public String list_title;
-
-
+    // Sets title of track list
     public TrackList(String title){
         this.list_title = title;
     }
@@ -17,14 +17,8 @@ public class TrackList{
         tracks.add(newTrack);
     }
 
-    public TrackItem get(int index){
-        return tracks.get(index);
-    }
-
+    // Returns full track list
     public List<TrackItem> getTracks(){
         return tracks;
-    }
-    public String getTitle(){
-        return this.list_title;
     }
 }

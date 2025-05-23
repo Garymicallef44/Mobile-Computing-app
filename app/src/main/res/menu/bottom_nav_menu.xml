@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/navigation_playlists"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@drawable/ic_action_name"
         android:title="@string/title_library" />
 
     <item

@@ -40,12 +40,12 @@ public class TrackLibViewModel extends AndroidViewModel {
         return suggestions;
     }
 
-    // Load a number of tracks in a bg thread and posts the resulting list into the suggestions livedata.
+    // Load a number of tracks in a bg thread and posts the resulting list into the suggestions livedata
     public void loadSuggestions(int count) {
         executor.execute(() -> {
-            // ← call the instance helper, not the class
+            // call the instance helper
             TrackList list = trackHelper.getTracksRandom(count, "Suggestions");
-            // post only the List<TrackItem> (not the TrackList wrapper)
+            // post only the List<TrackItem>
             suggestions.postValue(list.getTracks());
         });
     }

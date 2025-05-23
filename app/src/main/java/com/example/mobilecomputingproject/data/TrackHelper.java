@@ -52,9 +52,11 @@ public class TrackHelper extends SQLiteOpenHelper {
     public void initiateTables() {
         if (getTracks().isEmpty()) {
             this.insertTrack(new TrackItem("Upbeat Music", "Infraction", "Synth"));
-            this.insertTrack(new TrackItem("Better to burn than to fade ", "Demetori", "Rock"));
-            this.insertTrack(new TrackItem("Full life", "Person","Pop"));
+            this.insertTrack(new TrackItem("Mortals", "NCS", "FTrap"));
+            this.insertTrack(new TrackItem("My Heart", "NCS","Drumstep"));
             this.insertTrack(new TrackItem("Riebeck Cover", "Gary", "Classical"));
+            this.insertTrack(new TrackItem("Sky High", "NCS", "ProgHouse"));
+            this.insertTrack(new TrackItem("Blank", "NCS", "DubstepM"));
         }
     }
 
@@ -124,7 +126,7 @@ public class TrackHelper extends SQLiteOpenHelper {
             String title = cursor.getString(cursor.getColumnIndexOrThrow(_title));
             String artist = cursor.getString(cursor.getColumnIndexOrThrow(_artist));
             String genre = cursor.getString(cursor.getColumnIndexOrThrow(_genre));
-            track = new TrackItem((int) trackId, title, genre, artist);
+            track = new TrackItem((int) trackId, title, artist, genre);
         }
         cursor.close();
         return track;

@@ -14,6 +14,10 @@ public class Playlist {
         this.tracks = tracks;
     }
     // Image attributes
-    public String getImageUri() { return imageUri; }
-    public void setImageUri(String uri) { imageUri = uri; }
+    public String getImageUri() {
+        return imageUri;
+    }
+    public void setImageUri(String uri) {
+        this.imageUri = uri;
+    }
 }

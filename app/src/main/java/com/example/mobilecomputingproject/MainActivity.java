@@ -2,6 +2,7 @@ package com.example.mobilecomputingproject;
 
 import android.os.Bundle;
 import android.util.Log;
+import androidx.appcompat.widget.Toolbar;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(
                 this, R.id.nav_host_fragment_activity_main
         );
-        NavigationUI.setupActionBarWithNavController(
-                this, navController, appBarConfiguration
-        );
+
+        // Find toolbar view by its ID from the layout and set it as the actionbar
+        Toolbar toolbar = findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
+
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 }

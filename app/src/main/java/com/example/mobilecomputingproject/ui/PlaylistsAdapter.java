@@ -1,8 +1,10 @@
 package com.example.mobilecomputingproject.ui;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,22 +71,34 @@ public class PlaylistsAdapter
 
         Object item = displayList.get(pos);
         if (vh instanceof HeaderVH) {
-            ((HeaderVH) vh).bind((String) item);
+            ((HeaderVH) vh).bind((Playlist) item);
         } else {
             ((ChildVH) vh).bind((TrackItem) item);
         }
     }
 
-    // ViewHolder for header items
+    // ViewHolder for header items, name and cover
     static class HeaderVH extends RecyclerView.ViewHolder {
+        ImageView cover;
         TextView name;
         HeaderVH(View v) {
             super(v);
             name = v.findViewById(R.id.tvPlaylistName);
+            cover = v.findViewById(R.id.imgCover);
         }
-        void bind(String playlistName) {
-            name.setText(playlistName);
+        // Bind playlist data to header view
+        void bind(Playlist pl) {
+            name.setText(pl.name);
+            // Get URI string
+            String uriString = pl.getImageUri();
+            if (uriString != null) {
+                cover.setImageURI(Uri.parse(uriString));
+            } else {
+                // If no image was set, use default cover image
+                cover.setImageResource(R.drawable.ic_default_cover);
+            }
         }
+
     }
 
     // ViewHolder for child items (tracks)

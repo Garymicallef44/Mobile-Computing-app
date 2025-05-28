@@ -1,12 +1,19 @@
 package com.example.mobilecomputingproject.ui.playlists;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,6 +38,9 @@ public class PlaylistsFragment extends Fragment {
     private Prefs prefs;
     private TrackHelper db;
     private TrackListAdapter adapter;
+    private ActivityResultLauncher<Intent> pickImageLauncher;
+    private Uri selectedCoverUri;
+
 
     // Inflate fragment layout
     @Nullable @Override
@@ -78,6 +88,16 @@ public class PlaylistsFragment extends Fragment {
             startActivity(i);
         });
 
+        // Find ImageView and Button that will display cover image and trigger image picker then create an intent to open images only
+        ImageView imgCover = view.findViewById(R.id.imgCover);
+        Button btnPick = view.findViewById(R.id.btnPickCover);
+        btnPick.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType("image/*");
+            pickImageLauncher.launch(i);
+        });
+
         // Handle remove button taps to remove tracks from the playlist
         adapter.setOnRemoveClickListener(item -> {
             prefs.removeFromPlaylist(item.getId());
@@ -103,5 +123,15 @@ public class PlaylistsFragment extends Fragment {
             if (t != null) savedTracks.add(t);
         }
         adapter.submitList(savedTracks);
+
+        // Register launcher to handle image picked, if its OK and not null get image URI and display it in ImageView
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedCoverUri = result.getData().getData();
+                        imgCover.setImageURI(selectedCoverUri);
+                    }
+                });
     }
 }

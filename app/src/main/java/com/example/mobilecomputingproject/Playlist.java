@@ -8,8 +8,12 @@ import java.util.List;
 public class Playlist {
     public final String name;
     public final List<TrackItem> tracks;
+    private String imageUri;
     public Playlist(String name, List<TrackItem> tracks) {
         this.name   = name;
         this.tracks = tracks;
     }
+    // Image attributes
+    public String getImageUri() { return imageUri; }
+    public void setImageUri(String uri) { imageUri = uri; }
 }
